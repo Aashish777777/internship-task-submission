@@ -1,0 +1,163 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b0d91eca-29d4-4cca-9585-c26609224fac",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "26e1f91c-310f-4566-8287-b0845ac5b9b0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst top5 = items.slice(0, 5);\nconst result = top5.map(item => ({\n  json: {\n    id: item.json.id,\n    title: item.json.title,\n    body: item.json.body.substring(0, 100)\n  }\n}));\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7821649c-1f94-4818-830e-c405996931b6",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "278db6b0-cfcf-422b-b7cf-84e312f00ec7",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 3,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "7ba46672-9fbc-47f7-a6d6-fc50bbdbbcd3",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "9ca0e11f-ae85-4880-bdb8-74f116f4ae55",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        832,
+        96
+      ],
+      "id": "b310d5fc-6c08-4da9-89db-1a51c66cdaa9",
+      "name": "No Operation, do nothing1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5e437904-8077-4c51-a628-aaf6a27a68fc",
+  "meta": {
+    "instanceId": "615ec97ff8b01ed956b493b97beda3600477b4078bc4974fa20386fcccf17599"
+  },
+  "id": "pIbZQqdgzMhtkyWu",
+  "tags": []
+}
